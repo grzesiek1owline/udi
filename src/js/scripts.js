@@ -240,9 +240,15 @@ function removeAlerts(form) {
 
 function submitForm(form) {
 	const is_valid = validateForm(form);
+	let btn = jQuery('#btn-submit');
+	btn.attr('disabled', true);
+	btn.addClass('is-loading');
+
 	if(is_valid) {
-		sendForm(form);
+		sendForm(form, btn);
 	} else {
+		btn.removeClass('is-loading');
+		btn.removeAttr('disabled');
 		window.scrollTo({top: 0, behavior: 'smooth'});
 		return false;
 	}
@@ -304,7 +310,7 @@ otherAddress();
 
 // AJAX
 
-function sendForm(form) {
+function sendForm(form, btn) {
 	let data = jQuery(form).serialize();
 	console.log(window);
 	jQuery.ajax({
@@ -315,10 +321,17 @@ function sendForm(form) {
       form: data,
     },
     success: function (output) {
-      console.log(output)
+			console.log(output);
+			btn.removeClass('is-loading');
+			btn.text('Formularz wysłany');
+			btn.addClass('is-success');
     },
     error: function (xhr, status, errorThrown) {
-      console.log(errorThrown);
+			console.log(errorThrown);
+			btn.removeClass('is-loading');
+			btn.text('Wystąpił błąd, spróbuj ponownie');
+			btn.addClass('is-danger');
+			btn.removeAttr('disabled');
     },
   });
 }
