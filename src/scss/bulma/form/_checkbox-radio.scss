@@ -1,0 +1,37 @@
+%checkbox-radio {
+  cursor: pointer;
+  display: inline-block;
+  line-height: 1.25;
+  position: relative;
+
+  input {
+		cursor: pointer;
+		width: auto !important;
+  }
+
+  &:hover {
+    color: $input-hover-color;
+  }
+
+  &[disabled],
+  fieldset[disabled] & {
+    color: $input-disabled-color;
+    cursor: not-allowed;
+  }
+}
+
+.checkbox {
+  @extend %checkbox-radio;
+}
+
+.bulma-radio {
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-start;
+	width: auto !important;
+	font-size: 1rem;
+
+	& input {
+		width: 30px;
+	}
+}
