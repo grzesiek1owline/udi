@@ -7,12 +7,17 @@ function CopyAddressFields() {
 		let flat_number = document.getElementById('flat-number').value;
 		let zip = document.getElementById('zip').value;
 		let town = document.getElementById('town').value;
+		let area = document.getElementById('area').value;
+		let before = document.getElementById('before_street').value;
+
 
 		document.getElementById('street2').value = street;
 		document.getElementById('home-number2').value = home_number;
 		document.getElementById('flat-number2').value = flat_number;
 		document.getElementById('zip2').value = zip;
 		document.getElementById('town2').value = town;
+		document.getElementById('area2').value = area;
+		document.getElementById('before_street2').value = before;
 	}
 }
 
@@ -24,6 +29,8 @@ function clearOtherAdressFields() {
 		document.getElementById('flat-number2').value = '';
 		document.getElementById('zip2').value = '';
 		document.getElementById('town2').value = '';
+		document.getElementById('area2').value = '';
+		document.getElementById('before_street2').value = '';
 	}
 }
 
@@ -35,15 +42,30 @@ function validateForm(form) {
 				message: '^To pole jest wymagane.',
 			},
 			length: {
-				minimum: 6,
+				minimum: 2,
 				message: "^Ta wartość wydaje się być zbyt krótka",
 			}
 		},
-		// end 'name'
-		'pesel' : {
+		'surname' : {
+			presence: {
+				message: '^To pole jest wymagane.',
+			},
 			length: {
-				minimum: 9,
+				minimum: 2,
 				message: "^Ta wartość wydaje się być zbyt krótka",
+			},
+		},
+		// end 'name'
+		'user-code' : {
+			presence: {
+				message: '^To pole jest wymagane.',
+			},
+			numericality: {
+				message: "^Numer PESEL składa się tylko z cyfr.",
+			},
+			length: {
+				is: 11,
+				message: "^Numer PESEL powinien mieć 11 znaków.",
 			}
 		},
 		// end 'pesel'
@@ -138,7 +160,7 @@ function validateForm(form) {
 			},
 		},
 		// end 'email'
-		'tel' : {
+		'tele' : {
 			presence: {
 				message: '^To pole jest wymagane.',
 			}
@@ -158,11 +180,13 @@ function validateForm(form) {
 
 function handleFormSubmit(form, constraints) {
   // Pobieram wartości z formularza funkcją z biblioteki validatejs
-  var values = validate.collectFormValues(form);
+	var values = validate.collectFormValues(form);
+	// console.log(values);
 	// Usuwam alerty jeśli takowe już są
   removeAlerts(form);
 	// Sprawdzam walidacje i zbieram błędy
-  var errors = validate(values, constraints);
+	var errors = validate(values, constraints);
+	console.log(errors);
 	// Wyświetlam błędy
   showErrors(form, errors || {});
 	// Brak błędów? Zwraca TRUE
@@ -215,7 +239,6 @@ function removeAlerts(form) {
 }
 
 function submitForm(form) {
-	// alert(form);
 	const is_valid = validateForm(form);
 	if(is_valid) {
 		sendForm(form);
@@ -270,7 +293,7 @@ function otherAddress() {
 				other_address.style.display = 'none';
 			}
 			else {
-				other_address.style.display = 'flex';
+				other_address.style.display = 'block';
 				clearOtherAdressFields();
 			}
 		})

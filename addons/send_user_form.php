@@ -1,7 +1,9 @@
 <?php
 include get_theme_file_path( '/addons/simple_xlxs_gen.php' );
 
+// HELPERS
 
+/******* configure SMTP ***************************/
 add_action( 'phpmailer_init', 'my_phpmailer_init' );
 function my_phpmailer_init( PHPMailer $phpmailer ) {
     $phpmailer->Host = 'smtp.dpoczta.pl';
@@ -21,37 +23,44 @@ function onMailError( $wp_error ) {
 	print_r($wp_error);
 	echo "</pre>";
 }
+/***************************** */
 
-
-function send_user_form() {
-	parse_str($_POST[form], $form);
-	$sanitize_data = [];
-
-	foreach ($form as $key => $value) {
-		$sanitize = sanitize_text_field($value);
-		$sanitize_data[$key] = $sanitize;
-	}
-
-	send_admin_mail($sanitize_data);
-	send_user_mail($sanitize_data['email'], 'Dziękujemy!',$sanitize_data['name'], $sanitize_data['title']);
-	wp_die();
+/********* REMOVE TEMP FILE */
+function removeFile($path) {
+	unlink($path);
 }
+/***************************** */
 
+/********* GENERATE RANDOM STRING */
 
+function generateRandomString($length = 10) {
+	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	$charactersLength = strlen($characters);
+	$randomString = '';
+	for ($i = 0; $i < $length; $i++) {
+			$randomString .= $characters[rand(0, $charactersLength - 1)];
+	}
+	return $randomString;
+}
+/***************************** */
+
+/*********** SEND USER MAIL */
 function send_user_mail($mail, $subject, $user_name, $form_title) {
 	$msg = user_mail_template();
 	$msg = str_replace('{{NAME}}', $user_name, $msg);
 	$msg = str_replace('{{WNIOSEK}}', $form_title, $msg);
+
 	$mailResult = false;
 	$mailResult = wp_mail( $mail, $subject, $msg, '', '');
-
 	if($mailResult){
 		return 'result is true';
 	} else {
 		onMailError( $wp_error );
 	}
 }
+/***************************** */
 
+/*********** USER MAIL TEMPLATE */
 function user_mail_template() {
 	return '<!doctype html>
 	<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -331,23 +340,23 @@ function user_mail_template() {
 
 	</html>';
 }
+/***************************** */
 
+/*********** SEND ADMIN MAIL */
 function send_admin_mail($form) {
-	$name = explode(' ', $form['name']);
-	unset($form['name']);
 	unset($form['title']);
 
 	$form_sorted = sortFormData($form);
 
-	$file = createXLXS($name[0], $name[1], $form);
+	$file = createXLXS($form_sorted);
 
 	$file_path = get_stylesheet_directory() . '/temp/' . $file;
 	echo 'Dodaje jako załącznik ' . $file_path;
 	$attach = array($file_path);
 
 	$mailResult = false;
-	$mailResult = wp_mail( 'szewa21190@gmail.com', 'Nowe zgłoszenie formularzem', 'Formularz uzytkownika '.$form['name'].' w załączniku.', '', $attach);
-	unlink($file_path);
+	$mailResult = wp_mail( $form['email'], 'Nowe zgłoszenie formularzem', 'Formularz uzytkownika '.$form['name'].' w załączniku.', '', $attach);
+	removeFile($file_path);
 	if($mailResult){
 		return 'result is true';
 	} else {
@@ -355,89 +364,64 @@ function send_admin_mail($form) {
 		return false;
 	}
 }
+/***************************** */
 
-function createXLXS($name, $surname, $form) {
-
-	$included_columns = [2,3,4,19,20,21,22,23,24,25,26,27,28,29,30,45,46,47,48,49,50,51,52,53,56,62];
-
-	array_unshift($form, $name, $surname);
-
-	$comma_separated = implode(",", $form);
-	$newArray =  explode(",", $comma_separated);
-
-	$excel_array = array();
-	$current_index = 0;
-	for ($i=1; $i < 95 ; $i++) {
-		$j = $i - 1;
-
+/**************** CREATE DATA FOR EXCEL */
+function sortFormData($form) {
+	echo 'before sort: ';
+	print_r($form);
+	$temp_data = array();
+	$included_columns = [1,2,3,18,19,20,21,22,23,24,25,26,27,28,29,44,45,46,47,48,49,50,51,52,55,61];
+	$keys = ['name','surname','user-code','zip','town','area','before_street', 'street', 'home-number', 'flat-number', 'email', 'tele', 'name', 'surname','user-code','zip2','town2','area2','before_street2', 'street2', 'home-number2','flat-number2', 'email', 'tele', 'start-date', 'guarante-summary'];
+	$j = 0;
+	for ($i=0; $i < 100; $i++) {
 		if(in_array($i, $included_columns)) {
-			$excel_array[$j] = $newArray[$current_index];
-			$current_index++;
+			$temp_data[$i] = $form[$keys[$j]];
+			$j++;
 		} else {
-			$excel_array[$j] = '';
+			$temp_data[$i] = '';
 		}
 	}
+	echo 'sort: ';
+	print_r($temp_data);
+	return $temp_data;
+}
+
+/******************************/
+
+/************** CREATE XLXS **/
+function createXLXS($form) {
 
 	$data = array (
 		array('NUMER UG','IMIĘ','NAZWISKO','PESEL {11 cyfr}','DATA URODZENIA {RRRR-MM-DD}','PŁEĆ','NAZWA','FORMA DZIAŁALNOŚCI','NIP {10 cyfr}','REGON {9/14 cyfr}','PKD','IMIĘ','NAZWISKO','DATA URODZENIA {RRRR-MM-DD}','TYP DOKUMENTU','NUMER DOKUMENTU','KRAJ','OBYWATELSTWO','KOD POCZTOWY','MIEJSCOWOŚĆ','WOJEWÓDZTWO','PRZEDR. ULICY','ULICA','NUMER DOMU','NUMER LOKALU','EMAIL','TELEFON','IMIĘ','NAZWISKO','PESEL {11 cyfr}','DATA URODZENIA {RRRR-MM-DD}','PŁEĆ','NAZWA','FORMA DZIAŁALNOŚCI','NIP {10 cyfr}','REGON {9/14 cyfr}','PKD','IMIĘ','NAZWISKO','DATA URODZENIA {RRRR-MM-DD}','TYP DOKUMENTU','NUMER DOKUMENTU','KRAJ','OBYWATELSTWO','KOD POCZTOWY','MIEJSCOWOŚĆ','WOJEWÓDZTWO','PRZEDR. ULICY','ULICA','NUMER DOMU','NUMER LOKALU','EMAIL','TELEFON','LICZBA UBEZPIECZONYCH','DATA ZAWARCIA {RRRR-MM-DD}','DATA ROZPOCZĘCIA {RRRR-MM-DD}','DATA WYGAŚNIĘCIA {RRRR-MM-DD}','LICZBA RAT','KODY ROZSZERZEŃ','GRUPA ZAWODOWA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA'),
 	);
 
-	$result = array_push($data, $excel_array);
-	print_r($data);
+	array_push($data, $form);
 
-	// $writer = new XLSXWriter();
-	// $writer->writeSheet($data);
+	$writer = new XLSXWriter();
+	$writer->writeSheet($data);
 	$random_file_name = generateRandomString(5) . '-form.xlsx';
-	// $file_path = get_stylesheet_directory() . '/temp/' . $random_file_name;
-	// $writer->writeToFile($file_path);
+	$file_path = get_stylesheet_directory() . '/temp/' . $random_file_name;
+	$writer->writeToFile($file_path);
 
 	return $random_file_name;
 }
+/******************************/
 
-function generateRandomString($length = 10) {
-	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-	$charactersLength = strlen($characters);
-	$randomString = '';
-	for ($i = 0; $i < $length; $i++) {
-			$randomString .= $characters[rand(0, $charactersLength - 1)];
+// MAIN FUNCTIONS
+function send_user_form() {
+	parse_str($_POST[form], $form);
+	$sanitize_data = [];
+
+	foreach ($form as $key => $value) {
+		$sanitize = sanitize_text_field($value);
+		$sanitize_data[$key] = $sanitize;
 	}
-	return $randomString;
+
+	send_admin_mail($sanitize_data);
+	send_user_mail($sanitize_data['email'], 'Twoje zgłoszenie zostało przyjęte.',$sanitize_data['name'], $sanitize_data['title']);
+	wp_die();
 }
-
-
-function sortFormData($form) {
-
-	unset($form['name']);
-	unset($form['title']);
-	$name = explode(' ', $form['name']);
-
-
-	$temp_data = array();
-	$included_columns = [1,2,3,18,19,20,21,22,23,24,25,26,27,28,29,44,45,46,47,48,49,50,51,52,55,61];
-	$keys = ['name','surname','pesel','zip','town','area','before_street', 'street', 'home-number', 'flat-number', 'email', 'tele', 'name', 'surname','pesel','zip2','town2','area2','before_street2', 'street2', 'home-number2', 'email', 'tele', 'start-date', 'guarante-summary']
-
-	for ($i=0; $i < 100; $i++) {
-		if(in_array($i, $included_columns)) {
-			$temp_data[$i] = $form[$keys[i]];
-		} else {
-			$temp_data[i] = '';
-		}
-	}
-	echo 'TEMP: <br/>';
-	print_r($temp_data);
-}
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // ********** Formularz wypluwa mi takie coś: ************************************ //
