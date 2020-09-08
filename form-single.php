@@ -31,11 +31,19 @@ www.piib.org.pl w zakładce ubezpieczenia
 										<input class="input" type="hidden" name="title" value="WNIOSEK O ZAWARCIE UMOWY DODATKOWEJ W RAMACH OFERTY DLA PIIB ZWIĄZANEJ Z UMOWĄ GENERALNĄ">
 									</div>
 								</div>
+								<div class="field-body">
 								<div class="field">
 									<label for="name" class="label">Imię i nazwisko</label>
 									<div class="control">
 										<input class="input" type="text" name="name">
 									</div>
+								</div>
+								<div class="field">
+									<label for="surname" class="label">Imię i nazwisko</label>
+									<div class="control">
+										<input class="input" type="text" name="surname">
+									</div>
+								</div>
 								</div>
 								<div class="field-body">
 									<div class="field">
@@ -96,7 +104,7 @@ www.piib.org.pl w zakładce ubezpieczenia
 									<div class="field">
 										<label for="town" class="label">Miejscowość</label>
 										<div class="control">
-											<input class="input" type="number" name="town" id="town">
+											<input class="input" type="text" name="town" id="town">
 										</div>
 									</div>
 
@@ -126,7 +134,7 @@ www.piib.org.pl w zakładce ubezpieczenia
 									<div class="field">
 										<div class="control">
 											<label class="bulma-radio">
-												<input type="radio" name="guarante-summary" checked>
+												<input type="radio" name="guarante-summary" checked value="100000">
 												<div class="radio-info">
 													wariant I / Suma Gwarancyjna: 100.000 EURO <sup>2</sup> / składka 195 PLN <sup>3</sup>
 												</div>
@@ -136,7 +144,7 @@ www.piib.org.pl w zakładce ubezpieczenia
 									<div class="field">
 										<div class="control">
 											<label class="bulma-radio">
-												<input type="radio" name="guarante-summary">
+												<input type="radio" name="guarante-summary" value="200000">
 												<div class="radio-info">
 													wariant II / Suma Gwarancyjna: 200.000 EURO <sup>2</sup> / składka 395 PLN <sup>3</sup>
 												</div>
@@ -146,7 +154,7 @@ www.piib.org.pl w zakładce ubezpieczenia
 									<div class="field">
 										<div class="control">
 											<label class="bulma-radio">
-												<input type="radio" name="guarante-summary">
+												<input type="radio" name="guarante-summary" value="250000">
 												<div class="radio-info">
 													wariant III / Suma Gwarancyjna: 250.000 EURO <sup>2</sup> / składka 475 PLN <sup>3</sup>
 												</div>
@@ -156,7 +164,7 @@ www.piib.org.pl w zakładce ubezpieczenia
 									<div class="field">
 										<div class="control">
 											<label class="bulma-radio">
-												<input type="radio" name="guarante-summary">
+												<input type="radio" name="guarante-summary" value="300000">
 												<div class="radio-info">
 													wariant IV / Suma Gwarancyjna: 300.000 EURO <sup>2</sup> / składka 720 PLN <sup>3</sup>
 												</div>
@@ -166,7 +174,7 @@ www.piib.org.pl w zakładce ubezpieczenia
 									<div class="field">
 										<div class="control">
 											<label class="bulma-radio">
-												<input type="radio" name="guarante-summary">
+												<input type="radio" name="guarante-summary" value="400000">
 												<div class="radio-info">
 													wariant V / Suma Gwarancyjna: 400.000 EURO <sup>2</sup> / składka 1150 PLN <sup>3</sup>
 												</div>
@@ -224,7 +232,7 @@ www.piib.org.pl w zakładce ubezpieczenia
 									<div class="field">
 										<label for="town2" class="label">Miejscowość</label>
 										<div class="control">
-											<input class="input" type="number" name="town2" id="town2">
+											<input class="input" type="text" name="town2" id="town2">
 										</div>
 									</div>
 								</div>
@@ -270,6 +278,12 @@ www.piib.org.pl w zakładce ubezpieczenia
 										<label for="email" class="label">Adres email</label>
 										<div class="control">
 											<input class="input" type="email" name="email">
+										</div>
+									</div>
+									<div class="field">
+										<label for="tele" class="label">Telefon</label>
+										<div class="control">
+											<input class="input" type="tel" name="tele">
 										</div>
 									</div>
 							</div>

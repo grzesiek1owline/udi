@@ -138,6 +138,12 @@ function validateForm(form) {
 			},
 		},
 		// end 'email'
+		'tel' : {
+			presence: {
+				message: '^To pole jest wymagane.',
+			}
+		},
+		// end 'email'
 
 	}
 
@@ -246,6 +252,7 @@ for (let index = 0; index < inputs.length; index++) {
 
 form.addEventListener('submit', function(e){
 	e.preventDefault();
+	CopyAddressFields();
 	submitForm(this);
 })
 

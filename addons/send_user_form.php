@@ -1,4 +1,7 @@
 <?php
+include get_theme_file_path( '/addons/simple_xlxs_gen.php' );
+
+
 add_action( 'phpmailer_init', 'my_phpmailer_init' );
 function my_phpmailer_init( PHPMailer $phpmailer ) {
     $phpmailer->Host = 'smtp.dpoczta.pl';
@@ -29,9 +32,8 @@ function send_user_form() {
 		$sanitize_data[$key] = $sanitize;
 	}
 
-	print_r($sanitize_data);
-	$user_message = send_user_mail($sanitize_data['email'], 'Dziękujemy!',$sanitize_data['name'], $sanitize_data['title']);
-	echo $user_message;
+	send_admin_mail($sanitize_data);
+	send_user_mail($sanitize_data['email'], 'Dziękujemy!',$sanitize_data['name'], $sanitize_data['title']);
 	wp_die();
 }
 
@@ -49,7 +51,6 @@ function send_user_mail($mail, $subject, $user_name, $form_title) {
 		onMailError( $wp_error );
 	}
 }
-
 
 function user_mail_template() {
 	return '<!doctype html>
@@ -330,3 +331,135 @@ function user_mail_template() {
 
 	</html>';
 }
+
+function send_admin_mail($form) {
+	$name = explode(' ', $form['name']);
+	unset($form['name']);
+	unset($form['title']);
+
+	$form_sorted = sortFormData($form);
+
+	$file = createXLXS($name[0], $name[1], $form);
+
+	$file_path = get_stylesheet_directory() . '/temp/' . $file;
+	echo 'Dodaje jako załącznik ' . $file_path;
+	$attach = array($file_path);
+
+	$mailResult = false;
+	$mailResult = wp_mail( 'szewa21190@gmail.com', 'Nowe zgłoszenie formularzem', 'Formularz uzytkownika '.$form['name'].' w załączniku.', '', $attach);
+	unlink($file_path);
+	if($mailResult){
+		return 'result is true';
+	} else {
+		onMailError( $wp_error );
+		return false;
+	}
+}
+
+function createXLXS($name, $surname, $form) {
+
+	$included_columns = [2,3,4,19,20,21,22,23,24,25,26,27,28,29,30,45,46,47,48,49,50,51,52,53,56,62];
+
+	array_unshift($form, $name, $surname);
+
+	$comma_separated = implode(",", $form);
+	$newArray =  explode(",", $comma_separated);
+
+	$excel_array = array();
+	$current_index = 0;
+	for ($i=1; $i < 95 ; $i++) {
+		$j = $i - 1;
+
+		if(in_array($i, $included_columns)) {
+			$excel_array[$j] = $newArray[$current_index];
+			$current_index++;
+		} else {
+			$excel_array[$j] = '';
+		}
+	}
+
+	$data = array (
+		array('NUMER UG','IMIĘ','NAZWISKO','PESEL {11 cyfr}','DATA URODZENIA {RRRR-MM-DD}','PŁEĆ','NAZWA','FORMA DZIAŁALNOŚCI','NIP {10 cyfr}','REGON {9/14 cyfr}','PKD','IMIĘ','NAZWISKO','DATA URODZENIA {RRRR-MM-DD}','TYP DOKUMENTU','NUMER DOKUMENTU','KRAJ','OBYWATELSTWO','KOD POCZTOWY','MIEJSCOWOŚĆ','WOJEWÓDZTWO','PRZEDR. ULICY','ULICA','NUMER DOMU','NUMER LOKALU','EMAIL','TELEFON','IMIĘ','NAZWISKO','PESEL {11 cyfr}','DATA URODZENIA {RRRR-MM-DD}','PŁEĆ','NAZWA','FORMA DZIAŁALNOŚCI','NIP {10 cyfr}','REGON {9/14 cyfr}','PKD','IMIĘ','NAZWISKO','DATA URODZENIA {RRRR-MM-DD}','TYP DOKUMENTU','NUMER DOKUMENTU','KRAJ','OBYWATELSTWO','KOD POCZTOWY','MIEJSCOWOŚĆ','WOJEWÓDZTWO','PRZEDR. ULICY','ULICA','NUMER DOMU','NUMER LOKALU','EMAIL','TELEFON','LICZBA UBEZPIECZONYCH','DATA ZAWARCIA {RRRR-MM-DD}','DATA ROZPOCZĘCIA {RRRR-MM-DD}','DATA WYGAŚNIĘCIA {RRRR-MM-DD}','LICZBA RAT','KODY ROZSZERZEŃ','GRUPA ZAWODOWA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA'),
+	);
+
+	$result = array_push($data, $excel_array);
+	print_r($data);
+
+	// $writer = new XLSXWriter();
+	// $writer->writeSheet($data);
+	$random_file_name = generateRandomString(5) . '-form.xlsx';
+	// $file_path = get_stylesheet_directory() . '/temp/' . $random_file_name;
+	// $writer->writeToFile($file_path);
+
+	return $random_file_name;
+}
+
+function generateRandomString($length = 10) {
+	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	$charactersLength = strlen($characters);
+	$randomString = '';
+	for ($i = 0; $i < $length; $i++) {
+			$randomString .= $characters[rand(0, $charactersLength - 1)];
+	}
+	return $randomString;
+}
+
+
+function sortFormData($form) {
+
+	unset($form['name']);
+	unset($form['title']);
+	$name = explode(' ', $form['name']);
+
+
+	$temp_data = array();
+	$included_columns = [1,2,3,18,19,20,21,22,23,24,25,26,27,28,29,44,45,46,47,48,49,50,51,52,55,61];
+	$keys = ['name','surname','pesel','zip','town','area','before_street', 'street', 'home-number', 'flat-number', 'email', 'tele', 'name', 'surname','pesel','zip2','town2','area2','before_street2', 'street2', 'home-number2', 'email', 'tele', 'start-date', 'guarante-summary']
+
+	for ($i=0; $i < 100; $i++) {
+		if(in_array($i, $included_columns)) {
+			$temp_data[$i] = $form[$keys[i]];
+		} else {
+			$temp_data[i] = '';
+		}
+	}
+	echo 'TEMP: <br/>';
+	print_r($temp_data);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ********** Formularz wypluwa mi takie coś: ************************************ //
+// [title] => WNIOSEK O ZAWARCIE UMOWY DODATKOWEJ W RAMACH OFERTY DLA PIIB ZWIĄZANEJ Z UMOWĄ GENERALNĄ
+// [name] => Naomi Gibson
+// [pesel] => Vel quo est ea dolor
+// [member-number] => 443
+// [pkd] => Rerum molestiae volu
+// [street] => Ratione dolore provi
+// [home-number] => 936
+// [flat-number] => 244
+// [zip] => 90752
+// [town] => 11
+// [start-date] => 1972-08-21
+// [guarante-summary] => on
+// [address-2] => 1
+// [street2] => Explicabo Ab quidem
+// [home-number2] => 281
+// [flat-number2] => 695
+// [zip2] => 52896
+// [town2] => 74
+// [rodo] => on
+// [email] => qydaci@mailinator.com
+// [tele] => qydaci@mailinator.com
+// ****************************************************************************************
