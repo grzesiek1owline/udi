@@ -10,6 +10,7 @@ function CopyAddressFields() {
 		let area = document.getElementById('area').value;
 		let before = document.getElementById('before_street').value;
 
+		console.log(area);
 
 		document.getElementById('street2').value = street;
 		document.getElementById('home-number2').value = home_number;
@@ -81,6 +82,17 @@ function validateForm(form) {
 			}
 		},
 		// end 'street2'
+		'area' : {
+			presence: {
+				message: '^To pole jest wymagane.',
+			}
+		},
+		'area2' : {
+			presence: {
+				message: '^To pole jest wymagane.',
+			}
+		},
+		/* end area********************** */
 		'home-number' : {
 			presence: {
 				message: '^To pole jest wymagane.',
@@ -108,6 +120,11 @@ function validateForm(form) {
 		'zip' : {
 			presence: {
 				message: '^To pole jest wymagane.',
+			},
+			format: {
+				pattern: "[0-9]{2}\-[0-9]{3}",
+				flags: "i",
+				message: "Prawidłowy format to xx-xxx"
 			}
 		},
 		// end 'zip'
@@ -198,7 +215,7 @@ function handleFormSubmit(form, constraints) {
 }
 
 function showErrors(form, errors) {
-  let inputs = form.querySelectorAll('input');
+  let inputs = form.querySelectorAll('input, select');
 	// Dla każdego inputa z error-em wykonuję funkcję showErrorsForInput
   inputs.forEach(element => {
     showErrorsForInput(element, errors && errors[element.name]);
@@ -308,6 +325,23 @@ function otherAddress() {
 
 otherAddress();
 
+
+function minDate() {
+	var today = new Date();
+	var dd = String(today.getDate()).padStart(2, '0');
+	var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+	var yyyy = today.getFullYear();
+
+	today = yyyy + '-' + mm + '-' + dd ;
+
+	const date_input = document.querySelectorAll('input[type="date"]');
+	for (let index = 0; index < date_input.length; index++) {
+		const element = date_input[index];
+		element.setAttribute('min', today);
+	}
+}
+
+minDate();
 // AJAX
 
 function sendForm(form, btn) {

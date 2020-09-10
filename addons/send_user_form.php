@@ -398,6 +398,7 @@ function createXLXS($form) {
 
 	array_push($data, $form);
 
+
 	$writer = new XLSXWriter();
 	$writer->writeSheet($data);
 	$random_file_name = generateRandomString(5) . '-form.xlsx';

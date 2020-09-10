@@ -11,6 +11,7 @@ function CopyAddressFields() {
     var town = document.getElementById('town').value;
     var area = document.getElementById('area').value;
     var before = document.getElementById('before_street').value;
+    console.log(area);
     document.getElementById('street2').value = street;
     document.getElementById('home-number2').value = home_number;
     document.getElementById('flat-number2').value = flat_number;
@@ -82,6 +83,18 @@ function validateForm(form) {
       }
     },
     // end 'street2'
+    'area': {
+      presence: {
+        message: '^To pole jest wymagane.'
+      }
+    },
+    'area2': {
+      presence: {
+        message: '^To pole jest wymagane.'
+      }
+    },
+
+    /* end area********************** */
     'home-number': {
       presence: {
         message: '^To pole jest wymagane.'
@@ -109,6 +122,11 @@ function validateForm(form) {
     'zip': {
       presence: {
         message: '^To pole jest wymagane.'
+      },
+      format: {
+        pattern: "[0-9]{2}\-[0-9]{3}",
+        flags: "i",
+        message: "Prawidłowy format to xx-xxx"
       }
     },
     // end 'zip'
@@ -197,7 +215,7 @@ function handleFormSubmit(form, constraints) {
 }
 
 function showErrors(form, errors) {
-  var inputs = form.querySelectorAll('input'); // Dla każdego inputa z error-em wykonuję funkcję showErrorsForInput
+  var inputs = form.querySelectorAll('input, select'); // Dla każdego inputa z error-em wykonuję funkcję showErrorsForInput
 
   inputs.forEach(function (element) {
     showErrorsForInput(element, errors && errors[element.name]);
@@ -306,7 +324,25 @@ function otherAddress() {
   }
 }
 
-otherAddress(); // AJAX
+otherAddress();
+
+function minDate() {
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+
+  var yyyy = today.getFullYear();
+  today = yyyy + '-' + mm + '-' + dd;
+  var date_input = document.querySelectorAll('input[type="date"]');
+
+  for (var _index2 = 0; _index2 < date_input.length; _index2++) {
+    var _element2 = date_input[_index2];
+
+    _element2.setAttribute('min', today);
+  }
+}
+
+minDate(); // AJAX
 
 function sendForm(form, btn) {
   var data = jQuery(form).serialize();

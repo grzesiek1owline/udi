@@ -46,6 +46,20 @@ www.piib.org.pl w zakładce ubezpieczenia
 								</div>
 								</div>
 								<div class="field-body">
+								<div class="field">
+										<label for="email" class="label">Adres email</label>
+										<div class="control">
+											<input class="input" type="email" name="email">
+										</div>
+									</div>
+									<div class="field">
+										<label for="tele" class="label">Telefon</label>
+										<div class="control">
+											<input class="input" type="tel" name="tele">
+										</div>
+									</div>
+								</div>
+								<div class="field-body">
 									<div class="field">
 										<label for="user-code" class="label">PESEL</label>
 										<div class="control">
@@ -104,9 +118,9 @@ www.piib.org.pl w zakładce ubezpieczenia
 								</div>
 								<div class="field-body">
 									<div class="field">
-										<label for="zip" class="label">Kod pocztowy</label>
+										<label for="zip" class="label">Kod pocztowy (format xx-xxx)</label>
 										<div class="control">
-											<input class="input" name="zip" id="zip" type="text" pattern="[0-9]{2}\-[0-9]{3}">
+											<input class="input" name="zip" id="zip" type="text">
 										</div>
 									</div>
 									<div class="field">
@@ -118,7 +132,26 @@ www.piib.org.pl w zakładce ubezpieczenia
 									<div class="field">
 										<label for="area" class="label">Województwo</label>
 										<div class="control">
-											<input class="input" type="text" name="area" id="area">
+											<!-- <input class="input" type="text" name="area" id="area"> -->
+											<select id="area" name="area">
+													<option value="" disabled selected hidden>Województwo*</option>
+													<option value="Dolnośląskie">dolnośląskie</option>
+													<option value="Kujawsko-pomorskie">kujawsko-pomorskie</option>
+													<option value="Lubelskie">lubelskie</option>
+													<option value="Lubuskie">lubuskie</option>
+													<option value="Łódzkie">łódzkie</option>
+													<option value="Małopolskie">małopolskie</option>
+													<option value="Mazowieckie">mazowieckie</option>
+													<option value="Opolskie">opolskie</option>
+													<option value="Podkarpackie">podkarpackie</option>
+													<option value="Podlaskie">podlaskie</option>
+													<option value="Pomorskie">pomorskie</option>
+													<option value="Śląskie">śląskie</option>
+													<option value="Świętokrzyskie">świętokrzyskie</option>
+													<option value="Warmińsko-mazurskie">warmińsko-mazurskie</option>
+													<option value="Wielkopolskie">wielkopolskie</option>
+													<option value="Zachodniopomorskie">zachodniopomorskie</option>
+											</select>
 										</div>
 									</div>
 								</div>
@@ -135,10 +168,6 @@ www.piib.org.pl w zakładce ubezpieczenia
 										<div class="control">
 												<input class="input" type="date" id="start-date" name="start-date">
 										</div>
-									</div>
-									<div class="notification">
-										<i class="gg-info is-in-notification"></i>
-										1. Okres ubezpieczenia może rozpocząć się najwcześniej od następnego dnia po przesłaniu wniosku
 									</div>
 								</div>
 
@@ -245,7 +274,7 @@ www.piib.org.pl w zakładce ubezpieczenia
 								</div>
 								<div class="field-body">
 									<div class="field">
-										<label for="zip2" class="label">Kod pocztowy</label>
+										<label for="zip2" class="label">Kod pocztowy (format xx-xxx)</label>
 										<div class="control">
 											<input class="input" name="zip2" id="zip2" type="text" pattern="[0-9]{2}\-[0-9]{3}">
 										</div>
@@ -259,7 +288,25 @@ www.piib.org.pl w zakładce ubezpieczenia
 									<div class="field">
 										<label for="area2" class="label">Województwo</label>
 										<div class="control">
-											<input class="input" type="text" name="area2" id="area2">
+										<select id="area2" name="area2">
+													<option value="" disabled selected hidden>Województwo*</option>
+													<option value="Dolnośląskie">dolnośląskie</option>
+													<option value="Kujawsko-pomorskie">kujawsko-pomorskie</option>
+													<option value="Lubelskie">lubelskie</option>
+													<option value="Lubuskie">lubuskie</option>
+													<option value="Łódzkie">łódzkie</option>
+													<option value="Małopolskie">małopolskie</option>
+													<option value="Mazowieckie">mazowieckie</option>
+													<option value="Opolskie">opolskie</option>
+													<option value="Podkarpackie">podkarpackie</option>
+													<option value="Podlaskie">podlaskie</option>
+													<option value="Pomorskie">pomorskie</option>
+													<option value="Śląskie">śląskie</option>
+													<option value="Świętokrzyskie">świętokrzyskie</option>
+													<option value="Warmińsko-mazurskie">warmińsko-mazurskie</option>
+													<option value="Wielkopolskie">wielkopolskie</option>
+													<option value="Zachodniopomorskie">zachodniopomorskie</option>
+											</select>
 										</div>
 									</div>
 								</div>
@@ -298,25 +345,6 @@ www.piib.org.pl w zakładce ubezpieczenia
 								</p>
 							</div>
 							<!-- Koniec Sekcji 5 -->
-
-							<div class="form-section">
-								<p class="form-section__title">
-									DANE KONTAKTOWE
-								</p>
-								<div class="field">
-										<label for="email" class="label">Adres email</label>
-										<div class="control">
-											<input class="input" type="email" name="email">
-										</div>
-									</div>
-									<div class="field">
-										<label for="tele" class="label">Telefon</label>
-										<div class="control">
-											<input class="input" type="tel" name="tele">
-										</div>
-									</div>
-							</div>
-							<!-- Koniec Sekcji 6 -->
 
 							<div class="form-section">
 								<div class="field">
