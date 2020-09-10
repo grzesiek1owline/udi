@@ -414,7 +414,7 @@ function sortFormData($form) {
 
 	$temp_data = array();
 	$included_columns = [1,2,3,18,19,20,21,22,23,24,25,26,27,28,29,44,45,46,47,48,49,50,51,52,55,61];
-	$keys = ['name','surname','pesel','zip','town','area','before_street', 'street', 'home-number', 'flat-number', 'email', 'tele', 'name', 'surname','pesel','zip2','town2','area2','before_street2', 'street2', 'home-number2', 'email', 'tele', 'start-date', 'guarante-summary']
+	$keys = ['name','surname','pesel','zip','town','area','before_street', 'street', 'home-number', 'flat-number', 'email', 'tele', 'name', 'surname','pesel','zip2','town2','area2','before_street2', 'street2', 'home-number2', 'email', 'tele', 'start-date', 'guarante-summary'];
 
 	for ($i=0; $i < 100; $i++) {
 		if(in_array($i, $included_columns)) {

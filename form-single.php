@@ -58,12 +58,12 @@ www.piib.org.pl w zakładce ubezpieczenia
 											<input class="input" type="text" name="member-number">
 										</div>
 									</div>
-									<div class="field">
+									<!-- <div class="field">
 										<label for="pkd" class="label">PKD głównej działalności<sup>1</sup></label>
 										<div class="control">
 											<input class="input" type="text" name="pkd">
 										</div>
-									</div>
+									</div> -->
 								</div>
 								<div class="notification">
 									<i class="gg-info is-in-notification"></i>
@@ -86,7 +86,7 @@ www.piib.org.pl w zakładce ubezpieczenia
 									<div class="field">
 										<label for="home-number" class="label">Numer domu</label>
 										<div class="control">
-											<input class="input" type="number" name="home-number" id="home-number">
+											<input class="input" type="text" name="home-number" id="home-number">
 										</div>
 									</div>
 									<div class="field">
@@ -98,7 +98,7 @@ www.piib.org.pl w zakładce ubezpieczenia
 									<div class="field">
 										<label for="zip" class="label">Kod pocztowy</label>
 										<div class="control">
-											<input class="input" name="zip" id="zip" type="text">
+											<input class="input" name="zip" id="zip" type="text" pattern="[0-9]{2}\-[0-9]{3}">
 										</div>
 									</div>
 									<div class="field">
@@ -214,7 +214,7 @@ www.piib.org.pl w zakładce ubezpieczenia
 									<div class="field">
 										<label for="home-number2" class="label">Numer domu</label>
 										<div class="control">
-											<input class="input" type="number" name="home-number2" id="home-number2">
+											<input class="input" type="text" name="home-number2" id="home-number2">
 										</div>
 									</div>
 									<div class="field">
@@ -226,7 +226,7 @@ www.piib.org.pl w zakładce ubezpieczenia
 									<div class="field">
 										<label for="zip2" class="label">Kod pocztowy</label>
 										<div class="control">
-											<input class="input" name="zip2" id="zip2" type="text">
+											<input class="input" name="zip2" id="zip2" type="text" pattern="[0-9]{2}\-[0-9]{3}">
 										</div>
 									</div>
 									<div class="field">

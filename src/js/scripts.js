@@ -71,17 +71,17 @@ function validateForm(form) {
 			}
 		},
 		// end 'home-number2'
-		'flat-number' : {
-			presence: {
-				message: '^To pole jest wymagane.',
-			}
-		},
+		// 'flat-number' : {
+		// 	presence: {
+		// 		message: '^To pole jest wymagane.',
+		// 	}
+		// },
 		// end 'flat-number'
-		'flat-number2' : {
-			presence: {
-				message: '^To pole jest wymagane.',
-			}
-		},
+		// 'flat-number2' : {
+		// 	presence: {
+		// 		message: '^To pole jest wymagane.',
+		// 	}
+		// },
 		// end 'flat-number2'
 		'zip' : {
 			presence: {
