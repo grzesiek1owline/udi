@@ -9,11 +9,15 @@ function CopyAddressFields() {
     var flat_number = document.getElementById('flat-number').value;
     var zip = document.getElementById('zip').value;
     var town = document.getElementById('town').value;
+    var area = document.getElementById('area').value;
+    var before = document.getElementById('before_street').value;
     document.getElementById('street2').value = street;
     document.getElementById('home-number2').value = home_number;
     document.getElementById('flat-number2').value = flat_number;
     document.getElementById('zip2').value = zip;
     document.getElementById('town2').value = town;
+    document.getElementById('area2').value = area;
+    document.getElementById('before_street2').value = before;
   }
 }
 
@@ -26,6 +30,8 @@ function clearOtherAdressFields() {
     document.getElementById('flat-number2').value = '';
     document.getElementById('zip2').value = '';
     document.getElementById('town2').value = '';
+    document.getElementById('area2').value = '';
+    document.getElementById('before_street2').value = '';
   }
 }
 
@@ -37,15 +43,30 @@ function validateForm(form) {
         message: '^To pole jest wymagane.'
       },
       length: {
-        minimum: 6,
+        minimum: 2,
+        message: "^Ta wartość wydaje się być zbyt krótka"
+      }
+    },
+    'surname': {
+      presence: {
+        message: '^To pole jest wymagane.'
+      },
+      length: {
+        minimum: 2,
         message: "^Ta wartość wydaje się być zbyt krótka"
       }
     },
     // end 'name'
-    'pesel': {
+    'user-code': {
+      presence: {
+        message: '^To pole jest wymagane.'
+      },
+      numericality: {
+        message: "^Numer PESEL składa się tylko z cyfr."
+      },
       length: {
-        minimum: 9,
-        message: "^Ta wartość wydaje się być zbyt krótka"
+        is: 11,
+        message: "^Numer PESEL powinien mieć 11 znaków."
       }
     },
     // end 'pesel'
@@ -140,7 +161,7 @@ function validateForm(form) {
       }
     },
     // end 'email'
-    'tel': {
+    'tele': {
       presence: {
         message: '^To pole jest wymagane.'
       }
@@ -158,11 +179,13 @@ function validateForm(form) {
 
 function handleFormSubmit(form, constraints) {
   // Pobieram wartości z formularza funkcją z biblioteki validatejs
-  var values = validate.collectFormValues(form); // Usuwam alerty jeśli takowe już są
+  var values = validate.collectFormValues(form); // console.log(values);
+  // Usuwam alerty jeśli takowe już są
 
   removeAlerts(form); // Sprawdzam walidacje i zbieram błędy
 
-  var errors = validate(values, constraints); // Wyświetlam błędy
+  var errors = validate(values, constraints);
+  console.log(errors); // Wyświetlam błędy
 
   showErrors(form, errors || {}); // Brak błędów? Zwraca TRUE
 
@@ -217,12 +240,16 @@ function removeAlerts(form) {
 }
 
 function submitForm(form) {
-  // alert(form);
   var is_valid = validateForm(form);
+  var btn = jQuery('#btn-submit');
+  btn.attr('disabled', true);
+  btn.addClass('is-loading');
 
   if (is_valid) {
-    sendForm(form);
+    sendForm(form, btn);
   } else {
+    btn.removeClass('is-loading');
+    btn.removeAttr('disabled');
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
@@ -272,7 +299,7 @@ function otherAddress() {
       if (type == 'default') {
         other_address.style.display = 'none';
       } else {
-        other_address.style.display = 'flex';
+        other_address.style.display = 'block';
         clearOtherAdressFields();
       }
     });
@@ -281,7 +308,7 @@ function otherAddress() {
 
 otherAddress(); // AJAX
 
-function sendForm(form) {
+function sendForm(form, btn) {
   var data = jQuery(form).serialize();
   console.log(window);
   jQuery.ajax({
@@ -293,9 +320,16 @@ function sendForm(form) {
     },
     success: function success(output) {
       console.log(output);
+      btn.removeClass('is-loading');
+      btn.text('Formularz wysłany');
+      btn.addClass('is-success');
     },
     error: function error(xhr, status, errorThrown) {
       console.log(errorThrown);
+      btn.removeClass('is-loading');
+      btn.text('Wystąpił błąd, spróbuj ponownie');
+      btn.addClass('is-danger');
+      btn.removeAttr('disabled');
     }
   });
 }

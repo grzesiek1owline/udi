@@ -33,13 +33,13 @@ www.piib.org.pl w zakładce ubezpieczenia
 								</div>
 								<div class="field-body">
 								<div class="field">
-									<label for="name" class="label">Imię i nazwisko</label>
+									<label for="name" class="label">Imię</label>
 									<div class="control">
 										<input class="input" type="text" name="name">
 									</div>
 								</div>
 								<div class="field">
-									<label for="surname" class="label">Imię i nazwisko</label>
+									<label for="surname" class="label">Nazwisko</label>
 									<div class="control">
 										<input class="input" type="text" name="surname">
 									</div>
@@ -47,9 +47,9 @@ www.piib.org.pl w zakładce ubezpieczenia
 								</div>
 								<div class="field-body">
 									<div class="field">
-										<label for="pesel" class="label">PESEL</label>
+										<label for="user-code" class="label">PESEL</label>
 										<div class="control">
-											<input class="input" type="text" name="pesel">
+											<input class="input" type="text" name="user-code">
 										</div>
 									</div>
 									<div class="field">
@@ -78,7 +78,13 @@ www.piib.org.pl w zakładce ubezpieczenia
 								</p>
 								<div class="field-body">
 									<div class="field">
-										<label for="street" class="label">Ulica</label>
+										<label for="before_street" class="label">Ulica (przedrostek)</label>
+										<div class="control">
+											<input class="input" type="text" name="before_street" id="before_street" placeholder="Np. Aleja / Plac / Trakt itd">
+										</div>
+									</div>
+									<div class="field">
+										<label for="street" class="label">Ulica (nazwa)</label>
 										<div class="control">
 											<input class="input" type="text" name="street" id="street">
 										</div>
@@ -95,6 +101,8 @@ www.piib.org.pl w zakładce ubezpieczenia
 											<input class="input" type="number" name="flat-number" id="flat-number">
 										</div>
 									</div>
+								</div>
+								<div class="field-body">
 									<div class="field">
 										<label for="zip" class="label">Kod pocztowy</label>
 										<div class="control">
@@ -107,7 +115,12 @@ www.piib.org.pl w zakładce ubezpieczenia
 											<input class="input" type="text" name="town" id="town">
 										</div>
 									</div>
-
+									<div class="field">
+										<label for="area" class="label">Województwo</label>
+										<div class="control">
+											<input class="input" type="text" name="area" id="area">
+										</div>
+									</div>
 								</div>
 							</div>
 							<!-- Koniec Sekcji II. -->
@@ -203,10 +216,16 @@ www.piib.org.pl w zakładce ubezpieczenia
 										</label>
 									</div>
 								</div>
-
-								<div class="field-body" data-other-address style="display: none">
+								<div class="address-other" data-other-address style="display: none">
+								<div class="field-body">
+								<div class="field">
+										<label for="before_street2" class="label">Ulica (przedrostek)</label>
+										<div class="control">
+											<input class="input" type="text" name="before_street2" id="before_street2" placeholder="Np. Aleja / Plac / Trakt itd">
+										</div>
+									</div>
 									<div class="field">
-										<label for="street2" class="label">Ulica</label>
+										<label for="street2" class="label">Ulica (nazwa)</label>
 										<div class="control">
 											<input class="input" type="text" name="street2" id="street2">
 										</div>
@@ -223,6 +242,8 @@ www.piib.org.pl w zakładce ubezpieczenia
 											<input class="input" type="number" name="flat-number2" id="flat-number2">
 										</div>
 									</div>
+								</div>
+								<div class="field-body">
 									<div class="field">
 										<label for="zip2" class="label">Kod pocztowy</label>
 										<div class="control">
@@ -235,7 +256,15 @@ www.piib.org.pl w zakładce ubezpieczenia
 											<input class="input" type="text" name="town2" id="town2">
 										</div>
 									</div>
+									<div class="field">
+										<label for="area2" class="label">Województwo</label>
+										<div class="control">
+											<input class="input" type="text" name="area2" id="area2">
+										</div>
+									</div>
 								</div>
+								</div>
+
 							</div>
 							<!-- Koniec Sekcji 3 -->
 
@@ -292,7 +321,7 @@ www.piib.org.pl w zakładce ubezpieczenia
 							<div class="form-section">
 								<div class="field">
 									<div class="control">
-										<button class="button button--submit">
+										<button class="button button--submit" id="btn-submit">
 											Wyślij formularz
 										</button>
 									</div>
