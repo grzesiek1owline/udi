@@ -267,7 +267,7 @@ function user_mail_template() {
 									<table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%">
 										<tr>
 											<td align="center" style="font-size:0px;padding:0px 25px 0px 25px;word-break:break-word;">
-												<div style="font-family:Arial, sans-serif;font-size:14px;line-height:28px;text-align:center;color:#55575d;">Właśnie przyjęliśmy od Ciebie formularz zawierający {{WNIOSEK}}. Skontaktujemy się z Tobą najszybciej jak to możliwe.</div>
+												<div style="font-family:Arial, sans-serif;font-size:14px;line-height:28px;text-align:center;color:#55575d;">Właśnie przyjęliśmy od Ciebie formularz zawierający {{WNIOSEK}}. Skontaktujemy się z Tobą najszybciej jak to możliwe. W razie pytań prosimy o kontakt <a href="tel:730 470 949">730 470 949</a>.</div>
 											</td>
 										</tr>
 									</table>

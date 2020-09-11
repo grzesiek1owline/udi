@@ -235,9 +235,13 @@ www.piib.org.pl w zakładce ubezpieczenia
 								<div class="field">
 									<p class="form-section__subtitle">3. Polisę potwierdzającą zawarcie umowy ubezpieczenia odpowiedzialności cywilnej inżyniera budownictwa na dodatkową sumę gwarancyjną, proszę przesłać na adres</p>
 									<div class="control">
+									<label class="bulma-radio" data-show-other-address="default">
+											<input type="radio" name="address-2" id="other-address-none" value="none" checked>
+												nie ma potrzeby wysyłania oryginały polisy pocztą
+										</label>
 										<label class="bulma-radio" data-show-other-address="default">
-											<input type="radio" name="address-2" id="other-address-default" value="0" checked>
-											jak podany powyżej
+											<input type="radio" name="address-2" id="other-address-default" value="0">
+												jak podany powyżej
 										</label>
 										<label class="bulma-radio" data-show-other-address="other">
 											<input type="radio" name="address-2" id="other-address" value="1">
