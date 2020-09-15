@@ -342,7 +342,7 @@ www.piib.org.pl w zakładce ubezpieczenia
 
 							<div class="form-section">
 								<div class="field">
-									<div class="control">
+									<div class="control" style="margin-bottom: 20px">
 										<button class="button button--submit" id="btn-submit">
 											Wyślij formularz
 										</button>

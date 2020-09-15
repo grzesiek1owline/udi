@@ -361,8 +361,26 @@ function send_admin_mail($form)
 	echo 'Dodaje jako załącznik ' . $file_path;
 	$attach = array($file_path);
 
+	// INNY ADRES
+	$other_address = $form['address-2'];
+
+	$other_address_info = '<br/>Uzytkownik potrzebuje oryginał polisy wysłany na adres {{ULICA}} {{NUMER}} / {{LOKAL}} , {{KOD}} {{MIASTO}} , {{WOJEWODZTWO}}';
+
+	if($other_address == '0') {
+		$templates = array('{{ULICA}}', '{{NUMER}}' , '{{LOKAL}}' , '{{KOD}}' , '{{MIASTO}}' , '{{WOJEWODZTWO}}');
+		$data_address = array($form['street'],$form['home-number'],$form['flat-number'], $form['zip'], $form['town'], $form['area']);
+		$other_address_text = str_replace($templates, $data_address, $other_address_info);
+
+	}else if($other_address == '1') {
+		$templates = array('{{ULICA}}', '{{NUMER}}' , '{{LOKAL}}' , '{{KOD}}' , '{{MIASTO}}' , '{{WOJEWODZTWO}}');
+		$data_address = array($form['street2'],$form['home-number2'],$form['flat-number2'], $form['zip2'], $form['town2'], $form['area2']);
+		$other_address_text = str_replace($templates, $data_address, $other_address_info);
+	} else {
+		$other_address_text = '<br/> Użytkownik nie potrzebuje oryginału polisy.';
+	}
+
 	$mailResult = false;
-	$mailResult = wp_mail($form['email'], 'Nowe zgłoszenie formularzem', 'Formularz uzytkownika ' . $form['name'] . ' w załączniku.', '', $attach);
+	$mailResult = wp_mail($form['email'], 'Nowe zgłoszenie formularzem', 'Formularz uzytkownika ' . $form['name'] . ' w załączniku.' . $other_address_text, '', $attach);
 	removeFile($file_path);
 	if ($mailResult) {
 		return 'result is true';
