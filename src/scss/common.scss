@@ -192,6 +192,7 @@ opacity: 1;
 
 .online-form {
 	margin: 60px 0 60px;
+	font-size: 0.825rem;
 
 	&__header {
 		text-align: center;
@@ -201,13 +202,14 @@ opacity: 1;
 			font-weight: bold;
 			margin-bottom: 10px;
 			line-height: 1.225;
+			font-size: 2rem;
 		}
 	}
 }
 
 .form-section {
 	border: 1px solid #ea7900;
-	margin-bottom: 2rem;
+	margin-bottom: 1rem;
 	padding: 2rem;
 
 	&__title {
@@ -215,6 +217,7 @@ opacity: 1;
 		border-bottom: 1px solid #ea7900;
 		margin-bottom: 1rem;
 		padding-bottom: 0.5rem;
+		font-size: 0.825rem;
 	}
 
 	&__subtitle {
@@ -296,4 +299,10 @@ input.has-error {
 select {
 	border-color: #dbdbdb !important;
 	border-radius: 4px !important;
+	font-size: 0.825rem;
+	line-height: 1;
+	padding-bottom: $control-padding-vertical;
+  padding-left: $control-padding-horizontal;
+  padding-right: $control-padding-horizontal;
+  padding-top: $control-padding-vertical;
 }

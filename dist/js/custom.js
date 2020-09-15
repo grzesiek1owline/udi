@@ -346,8 +346,7 @@ minDate(); // AJAX
 
 function sendForm(form, btn) {
   var data = jQuery(form).serialize();
-  var notify = document.createElement('div');
-  notify.classList.add('notification');
+  var notify = jQuery('[data-form-result]');
   jQuery.ajax({
     type: 'POST',
     url: window.my_ajax_object.ajax_url,
@@ -360,9 +359,8 @@ function sendForm(form, btn) {
       btn.removeClass('is-loading');
       btn.text('Formularz wysłany');
       btn.addClass('is-success');
+      notify.addClass(' notification is-success');
       notify.text('Dziękujęmy za przesłanie wniosku. Polisa zostanie przesłana w ciągu dni roboczych. Dalsze informacje w wiadomości mailowej');
-      notify.addClass('is-success');
-      btn.after(notify);
     },
     error: function error(xhr, status, errorThrown) {
       console.log(errorThrown);

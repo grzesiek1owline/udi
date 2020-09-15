@@ -1,24 +1,26 @@
 <?php
-include get_theme_file_path( '/addons/simple_xlxs_gen.php' );
+include get_theme_file_path('/addons/simple_xlxs_gen.php');
 
 // HELPERS
 
 /******* configure SMTP ***************************/
-add_action( 'phpmailer_init', 'my_phpmailer_init' );
-function my_phpmailer_init( PHPMailer $phpmailer ) {
-    $phpmailer->Host = 'smtp.dpoczta.pl';
-    $phpmailer->Port = 587; // could be different
-    $phpmailer->Username = 'formularze@ubezpieczeniadlainzynierow.pl'; // if required
-		$phpmailer->Password = 'XQkciBUuzGj43YC'; // if required
-		$phpmailer->From = "formularze@ubezpieczeniadlainzynierow.pl";
-		$phpmailer->FromName   = 'UDI';
-		$phpmailer->isHTML(true);
-    $phpmailer->SMTPAuth = true; // if required
-    $phpmailer->SMTPSecure = 'tls'; // enable if required, 'tls' is another possible value
-    $phpmailer->IsSMTP();
+add_action('phpmailer_init', 'my_phpmailer_init');
+function my_phpmailer_init(PHPMailer $phpmailer)
+{
+	$phpmailer->Host = 'smtp.dpoczta.pl';
+	$phpmailer->Port = 587; // could be different
+	$phpmailer->Username = 'formularze@ubezpieczeniadlainzynierow.pl'; // if required
+	$phpmailer->Password = 'XQkciBUuzGj43YC'; // if required
+	$phpmailer->From = "formularze@ubezpieczeniadlainzynierow.pl";
+	$phpmailer->FromName   = 'UDI';
+	$phpmailer->isHTML(true);
+	$phpmailer->SMTPAuth = true; // if required
+	$phpmailer->SMTPSecure = 'tls'; // enable if required, 'tls' is another possible value
+	$phpmailer->IsSMTP();
 }
-add_action( 'wp_mail_failed', 'onMailError', 10, 1 );
-function onMailError( $wp_error ) {
+add_action('wp_mail_failed', 'onMailError', 10, 1);
+function onMailError($wp_error)
+{
 	echo "<pre>";
 	print_r($wp_error);
 	echo "</pre>";
@@ -26,42 +28,46 @@ function onMailError( $wp_error ) {
 /***************************** */
 
 /********* REMOVE TEMP FILE */
-function removeFile($path) {
+function removeFile($path)
+{
 	unlink($path);
 }
 /***************************** */
 
 /********* GENERATE RANDOM STRING */
 
-function generateRandomString($length = 10) {
+function generateRandomString($length = 10)
+{
 	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	$charactersLength = strlen($characters);
 	$randomString = '';
 	for ($i = 0; $i < $length; $i++) {
-			$randomString .= $characters[rand(0, $charactersLength - 1)];
+		$randomString .= $characters[rand(0, $charactersLength - 1)];
 	}
 	return $randomString;
 }
 /***************************** */
 
 /*********** SEND USER MAIL */
-function send_user_mail($mail, $subject, $user_name, $form_title) {
+function send_user_mail($mail, $subject, $user_name, $form_title)
+{
 	$msg = user_mail_template();
 	$msg = str_replace('{{NAME}}', $user_name, $msg);
 	$msg = str_replace('{{WNIOSEK}}', $form_title, $msg);
 
 	$mailResult = false;
-	$mailResult = wp_mail( $mail, $subject, $msg, '', '');
-	if($mailResult){
+	$mailResult = wp_mail($mail, $subject, $msg, '', '');
+	if ($mailResult) {
 		return 'result is true';
 	} else {
-		onMailError( $wp_error );
+		onMailError($wp_error);
 	}
 }
 /***************************** */
 
 /*********** USER MAIL TEMPLATE */
-function user_mail_template() {
+function user_mail_template()
+{
 	return '<!doctype html>
 	<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 
@@ -343,7 +349,8 @@ function user_mail_template() {
 /***************************** */
 
 /*********** SEND ADMIN MAIL */
-function send_admin_mail($form) {
+function send_admin_mail($form)
+{
 	unset($form['title']);
 
 	$form_sorted = sortFormData($form);
@@ -355,45 +362,50 @@ function send_admin_mail($form) {
 	$attach = array($file_path);
 
 	$mailResult = false;
-	$mailResult = wp_mail( $form['email'], 'Nowe zgłoszenie formularzem', 'Formularz uzytkownika '.$form['name'].' w załączniku.', '', $attach);
+	$mailResult = wp_mail($form['email'], 'Nowe zgłoszenie formularzem', 'Formularz uzytkownika ' . $form['name'] . ' w załączniku.', '', $attach);
 	removeFile($file_path);
-	if($mailResult){
+	if ($mailResult) {
 		return 'result is true';
 	} else {
-		onMailError( $wp_error );
+		onMailError($wp_error);
 		return false;
 	}
 }
 /***************************** */
 
 /**************** CREATE DATA FOR EXCEL */
-function sortFormData($form) {
+function sortFormData($form)
+{
 	echo 'before sort: ';
 	print_r($form);
 	$temp_data = array();
-	$included_columns = [1,2,3,18,19,20,21,22,23,24,25,26,27,28,29,44,45,46,47,48,49,50,51,52,55,61];
-	$keys = ['name','surname','user-code','zip','town','area','before_street', 'street', 'home-number', 'flat-number', 'email', 'tele', 'name', 'surname','user-code','zip2','town2','area2','before_street2', 'street2', 'home-number2','flat-number2', 'email', 'tele', 'start-date', 'guarante-summary'];
+	$included_columns = [0, 1, 2, 17, 18, 19, 20, 21, 22, 23, 24, 25];
+	$keys = ['name', 'surname', 'user-code', 'zip', 'town', 'area', 'before_street', 'street', 'home-number', 'flat-number', 'email', 'tele'];
+	// $keys = ['name','surname','user-code','zip','town','area','before_street', 'street', 'home-number', 'flat-number', 'email', 'tele', 'name', 'surname','user-code','zip2','town2','area2','before_street2', 'street2', 'home-number2','flat-number2', 'email', 'tele', 'start-date', 'guarante-summary'];
 	$j = 0;
-	for ($i=0; $i < 100; $i++) {
-		if(in_array($i, $included_columns)) {
+	for ($i = 0; $i < 100; $i++) {
+		if (in_array($i, $included_columns)) {
 			$temp_data[$i] = $form[$keys[$j]];
 			$j++;
 		} else {
 			$temp_data[$i] = '';
 		}
 	}
-	echo 'sort: ';
-	print_r($temp_data);
+	// echo 'sortowanie: ';
+	// print_r($temp_data);
 	return $temp_data;
 }
 
 /******************************/
 
 /************** CREATE XLXS **/
-function createXLXS($form) {
+function createXLXS($form)
+{
 
-	$data = array (
-		array('NUMER UG','IMIĘ','NAZWISKO','PESEL {11 cyfr}','DATA URODZENIA {RRRR-MM-DD}','PŁEĆ','NAZWA','FORMA DZIAŁALNOŚCI','NIP {10 cyfr}','REGON {9/14 cyfr}','PKD','IMIĘ','NAZWISKO','DATA URODZENIA {RRRR-MM-DD}','TYP DOKUMENTU','NUMER DOKUMENTU','KRAJ','OBYWATELSTWO','KOD POCZTOWY','MIEJSCOWOŚĆ','WOJEWÓDZTWO','PRZEDR. ULICY','ULICA','NUMER DOMU','NUMER LOKALU','EMAIL','TELEFON','IMIĘ','NAZWISKO','PESEL {11 cyfr}','DATA URODZENIA {RRRR-MM-DD}','PŁEĆ','NAZWA','FORMA DZIAŁALNOŚCI','NIP {10 cyfr}','REGON {9/14 cyfr}','PKD','IMIĘ','NAZWISKO','DATA URODZENIA {RRRR-MM-DD}','TYP DOKUMENTU','NUMER DOKUMENTU','KRAJ','OBYWATELSTWO','KOD POCZTOWY','MIEJSCOWOŚĆ','WOJEWÓDZTWO','PRZEDR. ULICY','ULICA','NUMER DOMU','NUMER LOKALU','EMAIL','TELEFON','LICZBA UBEZPIECZONYCH','DATA ZAWARCIA {RRRR-MM-DD}','DATA ROZPOCZĘCIA {RRRR-MM-DD}','DATA WYGAŚNIĘCIA {RRRR-MM-DD}','LICZBA RAT','KODY ROZSZERZEŃ','GRUPA ZAWODOWA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA'),
+	//		array('IMIĘ','NAZWISKO','PESEL {11 cyfr}','DATA URODZENIA {RRRR-MM-DD}','PŁEĆ','NAZWA','FORMA DZIAŁALNOŚCI','NIP {10 cyfr}','REGON {9/14 cyfr}','PKD','IMIĘ','NAZWISKO','DATA URODZENIA {RRRR-MM-DD}','TYP DOKUMENTU','NUMER DOKUMENTU','KRAJ','OBYWATELSTWO','KOD POCZTOWY','MIEJSCOWOŚĆ','WOJEWÓDZTWO','PRZEDR. ULICY','ULICA','NUMER DOMU','NUMER LOKALU','EMAIL','TELEFON','IMIĘ','NAZWISKO','PESEL {11 cyfr}','DATA URODZENIA {RRRR-MM-DD}','PŁEĆ','NAZWA','FORMA DZIAŁALNOŚCI','NIP {10 cyfr}','REGON {9/14 cyfr}','PKD','IMIĘ','NAZWISKO','DATA URODZENIA {RRRR-MM-DD}','TYP DOKUMENTU','NUMER DOKUMENTU','KRAJ','OBYWATELSTWO','KOD POCZTOWY','MIEJSCOWOŚĆ','WOJEWÓDZTWO','PRZEDR. ULICY','ULICA','NUMER DOMU','NUMER LOKALU','EMAIL','TELEFON','LICZBA UBEZPIECZONYCH','DATA ZAWARCIA {RRRR-MM-DD}','DATA ROZPOCZĘCIA {RRRR-MM-DD}','DATA WYGAŚNIĘCIA {RRRR-MM-DD}','LICZBA RAT','KODY ROZSZERZEŃ','GRUPA ZAWODOWA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA','KOD','SUMA GWARANCYJNA','FRANSZYZA REDUKCYJNA','FRANSZYZA INTEGRALNA'),
+
+	$data = array(
+		array('IMIĘ', 'NAZWISKO', 'PESEL {11 cyfr}', 'DATA URODZENIA {RRRR-MM-DD}', 'PŁEĆ', 'NAZWA', 'FORMA DZIAŁALNOŚCI', 'NIP {10 cyfr}', 'REGON {9/14 cyfr}', 'PKD', 'IMIĘ', 'NAZWISKO', 'DATA URODZENIA {RRRR-MM-DD}', 'TYP DOKUMENTU', 'NUMER DOKUMENTU', 'KRAJ', 'OBYWATELSTWO', 'KOD POCZTOWY', 'MIEJSCOWOŚĆ', 'WOJEWÓDZTWO', 'PRZEDR. ULICY', 'ULICA', 'NUMER DOMU', 'NUMER LOKALU', 'EMAIL', 'TELEFON'),
 	);
 
 	array_push($data, $form);
@@ -410,7 +422,8 @@ function createXLXS($form) {
 /******************************/
 
 // MAIN FUNCTIONS
-function send_user_form() {
+function send_user_form()
+{
 	parse_str($_POST[form], $form);
 	$sanitize_data = [];
 
@@ -420,7 +433,7 @@ function send_user_form() {
 	}
 
 	send_admin_mail($sanitize_data);
-	send_user_mail($sanitize_data['email'], 'Twoje zgłoszenie zostało przyjęte.',$sanitize_data['name'], $sanitize_data['title']);
+	send_user_mail($sanitize_data['email'], 'Twoje zgłoszenie zostało przyjęte.', $sanitize_data['name'], $sanitize_data['title']);
 	wp_die();
 }
 

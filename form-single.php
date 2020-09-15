@@ -72,16 +72,6 @@ www.piib.org.pl w zakładce ubezpieczenia
 											<input class="input" type="text" name="member-number">
 										</div>
 									</div>
-									<!-- <div class="field">
-										<label for="pkd" class="label">PKD głównej działalności<sup>1</sup></label>
-										<div class="control">
-											<input class="input" type="text" name="pkd">
-										</div>
-									</div> -->
-								</div>
-								<div class="notification">
-									<i class="gg-info is-in-notification"></i>
-									1. Wpis wyłącznie w celach statystycznych, dla osób nie prowadzących działalności gospodarczej zostanie przydzielony nr 71.12.Z
 								</div>
 							</div>
 							<!-- Koniec sekcji I. -->
@@ -357,6 +347,7 @@ www.piib.org.pl w zakładce ubezpieczenia
 											Wyślij formularz
 										</button>
 									</div>
+									<div class="form-result" data-form-result></div>
 								</div>
 							</div>
 							<!-- Koniec Sekcji 4 -->
